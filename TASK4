@@ -1,37 +1,38 @@
 import matplotlib.pyplot as plt
 
-def quadratic_temperature_model(day, a, b, c):
-      # Quadratic equation for temperature
-      temperature = a * day**2 + b * day + c
-      return temperature
+def quadratic_weather_model(time, a, b, c):
+    temperature = a * (time ** 2) + b * time + c
+    return temperature
 
 def main():
-      # Fixed coefficients
-      fixed_a, fixed_b, fixed_c = 1, 5, 6
+    print("Quadratic Weather Modeling")
+    print("==========================")
 
-      # Get user input for quadratic coefficients
-      user_a = float(input("Enter the quadratic coefficient (a): "))
-      user_b = float(input("Enter the linear coefficient (b): "))
-      user_c = float(input("Enter the constant term (c): "))
+    try:
+        with open('multi1415.txt', 'r') as file:
+            lines = file.readlines()
 
-      # Get user input for the number of days to model
-      num_days = int(input("Enter the number of days to model: "))
+        time_values = list(range(0, 11)) 
+        plt.figure(figsize=(8, 6))
 
-      # Lists to store day and corresponding temperature values
-      days = list(range(1, num_days + 1))
+        for line in lines:
+            coefficients = line.split()
+            a, b, c = map(float, coefficients)
 
-      # Calculate temperatures for both fixed and user-input coefficients
-      fixed_temperatures = [quadratic_temperature_model(day, fixed_a, fixed_b, fixed_c) for day in days]
-      user_temperatures = [quadratic_temperature_model(day, user_a, user_b, user_c) for day in days]
+            temperature_values = [quadratic_weather_model(t, a, b, c) for t in time_values]
 
-      # Plotting
-      plt.plot(days, fixed_temperatures, label=f'Fixed Coefficients: {fixed_a}x^2 + {fixed_b}x + {fixed_c}')
-      plt.plot(days, user_temperatures, label=f'User Coefficients: {user_a}x^2 + {user_b}x + {user_c}')
-      plt.title('Weather Modeling')
-      plt.xlabel('Day')
-      plt.ylabel('Temperature (°C)')
-      plt.legend()
-      plt.show()
+            plt.plot(time_values, temperature_values, marker='o', linestyle='-', label=f'a={a}, b={b}, c={c}')
+
+        plt.title('Temperature Variation Over Time')
+        plt.xlabel('Time')
+        plt.ylabel('Temperature')
+        plt.grid(True)
+        plt.xlim(0, 10)
+        plt.legend()
+        plt.show()
+
+    except FileNotFoundError:
+        print("File not found. Please make sure 'multi1343.txt' exists.")
 
 if __name__ == "__main__":
-      main()
+    main()
